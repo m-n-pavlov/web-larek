@@ -19,6 +19,8 @@ const config = {
   devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
+		publicPath: isProduction ? "/web-larek/" : "/",
+		clean: true,
   },
   devServer: {
     open: true,
@@ -37,7 +39,7 @@ const config = {
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     new DefinePlugin({
       'process.env.DEVELOPMENT': !isProduction,
-      'process.env.API_ORIGIN': JSON.stringify(process.env.API_ORIGIN ?? '')
+      'process.env.API_ORIGIN': JSON.stringify(process.env.API_ORIGIN || 'https://larek-api.nomoreparties.co')
     })
   ],
   module: {
