@@ -1,7 +1,60 @@
-# Проектная работа "Веб-ларек"
-https://github.com/m-n-pavlov/web-larek-frontend/
+# WEB-ларёк
 
-Стек: HTML, SCSS, TS, Webpack
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white) ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black)
+
+[Открыть Demo](https://m-n-pavlov.github.io/web-larek/)
+
+<img src="assets/preview.png" alt="Превью проекта" width="100%">
+
+## Описание
+
+Интернет-магазин с товарами для веб-разработчиков, где можно посмотреть каталог товаров, добавить товары в корзину и сделать заказ.
+
+**Функционал**
+
+* Каталог товаров: подгрузка ассортимента с сервера и отображение карточек
+* Корзина: добавление товаров, удаление и расчет итоговой стоимости
+* Оформление заказа: двухшаговая форма (выбор способа оплаты/адреса и ввод контактных данных)
+* Валидация: интерактивная проверка полей ввода в формах заказа
+* Модальные окна: единая система отображения контента (карточки товара, корзина, формы)
+
+## Стек технологий
+
+* TypeScript: строгая типизация всех слоев приложения
+* Архитектура MVP: четкое разделение на Модель, Представление и Презентер
+* EventEmitter: событийно-ориентированный подход для связи компонентов
+* Webpack: сборка проекта, настройка ассетов и переменных окружения
+* SCSS: объектно-ориентированный подход к стилям
+
+## Архитектура проекта
+
+Приложение построено на принципах MVP (Model-View-Presenter):
+
+* Слой данных (Model): управляет состоянием товаров, корзины и данных пользователя
+* Слой представления (View): отвечает за отрисовку DOM-элементов и обработку пользовательских действий
+* Слой коммуникации (Presenter): координирует работу модели и представления через брокер событий (EventEmitter), обеспечивая слабую связанность компонентов
+
+## Запуск проекта
+
+```bash
+npm install
+npm run start
+```
+
+## Настройка API
+
+В проекте реализована гибкая конфигурация через переменные окружения. Для быстрого старта **дополнительная настройка не требуется** - по умолчанию используется актуальный эндпоинт Практикума.
+
+Если вам необходимо переопределить адрес сервера, создайте в корне проекта файл `.env`:
+
+```env
+API_ORIGIN=https://larek-api.nomoreparties.co
+```
+
+## 📖 Техническое описание (для разработчиков)
+
+<details>
+<summary>   Развернуть</summary>
 
 Структура проекта:
 - src/ - исходные файлы проекта
@@ -127,7 +180,7 @@ export type TFormErrors = Partial<Record<keyof TFormOrder | keyof TFormContacts,
 Основные методы, реализуемые классом описаны интерфейсом IEvents:
 - on - подписка на событие
 - emit - инициализация события
-- trigger - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие 
+- trigger - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие
 
 Остальные методы, в том числе, не используемые в приложении предоставляют универсальность и возможность переиспользования класса.
 
@@ -435,23 +488,25 @@ constructor(container: HTMLElement, actions? ISuccessActions)
 
 *События изменения данных (модели):*
 
-- `basket:items:updated` – (BasketModel) изменился список товаров в корзине  
-- `basket:items:cleared` – (BasketModel) корзина очищена  
-- `catalog:products:updated` – (CatalogModel) обновлён список товаров  
-- `catalog:selected:changed` – (CatalogModel) изменился выбранный товар  
-- `order:customer:updated` – (OrderModel) обновлены данные покупателя  
-- `formErrors:change` – (OrderModel) изменилось состояние ошибок формы  
-- `order:items:updated` – (OrderModel) изменился список id выбранных товаров  
-- `order:total:updated` – (OrderModel) изменилась сумма заказа  
-- `order:data:ready` – (OrderModel) собраны все данные заказа для отправки  
-- `order:customer:cleared` – (OrderModel) данные покупателя очищены  
+- `basket:items:updated` – (BasketModel) изменился список товаров в корзине
+- `basket:items:cleared` – (BasketModel) корзина очищена
+- `catalog:products:updated` – (CatalogModel) обновлён список товаров
+- `catalog:selected:changed` – (CatalogModel) изменился выбранный товар
+- `order:customer:updated` – (OrderModel) обновлены данные покупателя
+- `formErrors:change` – (OrderModel) изменилось состояние ошибок формы
+- `order:items:updated` – (OrderModel) изменился список id выбранных товаров
+- `order:total:updated` – (OrderModel) изменилась сумма заказа
+- `order:data:ready` – (OrderModel) собраны все данные заказа для отправки
+- `order:customer:cleared` – (OrderModel) данные покупателя очищены
 
 *События взаимодействия пользователя (представления / UI):*
 
-- `card:select` – (index.ts) выбран товар в каталоге, открывается превью  
-- `basket:item-delete` – (index.ts) клик по кнопке удаления товара из корзины  
-- `basket:go-to-order-step` – (index.ts) переход из корзины к форме заказа  
-- `order:open` – (index.ts) открыть форму заказа в модальном окне  
-- `order:submit` – (index.ts) отправка формы заказа (shipping)  
-- `contacts:open` – (index.ts) открыть форму контактов в модальном окне  
-- `contacts:submit` – (index.ts) отправка формы контактов  
+- `card:select` – (index.ts) выбран товар в каталоге, открывается превью
+- `basket:item-delete` – (index.ts) клик по кнопке удаления товара из корзины
+- `basket:go-to-order-step` – (index.ts) переход из корзины к форме заказа
+- `order:open` – (index.ts) открыть форму заказа в модальном окне
+- `order:submit` – (index.ts) отправка формы заказа (shipping)
+- `contacts:open` – (index.ts) открыть форму контактов в модальном окне
+- `contacts:submit` – (index.ts) отправка формы контактов
+
+</details>
